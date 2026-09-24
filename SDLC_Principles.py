@@ -66,36 +66,42 @@ Security & Trust: Checks against empty input.
 Collaboration: Docstrings/comments make it understandable for teams.
 """
 
-### Classroom Activity 
-
-## Step 1: Raw / Messy Pandas Code
-
 import pandas as pd
 
-# Load CSV
-df = pd.read_csv("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv")
 
-# Print average sepal length
-avg = df['sepal_length'].mean()
-print("Average sepal length:", avg)
+def load_data(url: str) -> pd.DataFrame:
+    """Load the Iris dataset from a CSV URL."""
+    return pd.read_csv(url)
 
-# Print max petal width
-mx = df['petal_width'].max()
-print("Max petal width:", mx)
 
-# Filter rows where species is setosa
-print(df[df['species'] == 'setosa'].head())
+def calculate_average_sepal_length(df: pd.DataFrame) -> float:
+    """Return the average sepal length."""
+    if "sepal_length" not in df.columns:
+        raise ValueError("Column 'sepal_length' not found")
+    return df["sepal_length"].mean()
 
-"""
-🔴 Problems:
 
-All logic in one block → not modular.
+def find_max_petal_width(df: pd.DataFrame) -> float:
+    """Return the maximum petal width."""
+    if "petal_width" not in df.columns:
+        raise ValueError("Column 'petal_width' not found")
+    return df["petal_width"].max()
 
-Hard to reuse functions for other datasets.
 
-No error handling → breaks if column names change.
+def filter_setosa(df: pd.DataFrame) -> pd.DataFrame:
+    """Return rows where species is setosa."""
+    if "species" not in df.columns:
+        raise ValueError("Column 'species' not found")
+    return df[df["species"] == "setosa"].head()
 
-Not scalable (imagine working on multiple CSVs).
 
-No documentation → not good for collaboration.
-""
+if __name__ == "__main__":
+    url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv"
+
+    data = load_data(url)
+
+    print("Average sepal length:",calculate_average_sepal_length(data))
+
+    print("Max petal width:",find_max_petal_width(data))
+
+    print(filter_setosa(data))
